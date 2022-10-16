@@ -1,13 +1,141 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+@media screen and (max-width: 899px) {
+  .app-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 1fr);
+    grid-template-areas:
+    "nav-bar"
+    "title__"
+    "content";
+    padding-bottom: 1px;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@media screen and (min-width: 900px) {
+    .app-layout {
+        display: grid;
+        grid-template-columns: min-content auto;
+        grid-template-areas:
+          "nav-bar title__"
+          "nav-bar content";
+      }
+}
+
+.app-content-planpage {
+    grid-area: content;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+        "tabs tabs tabs tabs"
+        "tab-panels tab-panels tab-panels tab-panels";
+}
+
+.app-content-tabs {
+    grid-area: tabs;
+}
+
+
+@media screen and (max-width: 899px) {
+    .app-content-tabpanel {
+        grid-area: tab-panels;
+        padding: 0 !important;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .app-content-tabpanel {
+        grid-area: tab-panels;
+        padding: 24 !important;
+    }
+}
+
+
+.card {
+    display: grid;
+    grid-gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+.task {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+}
+
+.app-navbar{
+    grid-area: nav-bar;
+    align-items: bottom;
+}
+
+.app-title {
+    grid-area: title__;
+    grid-template-rows: auto;
+    height: min-content;
+}
+
+.app-content {
+    grid-area: content;
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+}
+
+.app-edit {
+    grid-area: content;
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: auto;
+}
+
+.app-homepage {
+    grid-area: content;
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: auto;
+}
+
+.card-calendar {
+    display: grid;
+    width: 90vw;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+}
+
+.card-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      font-size: 18px;
+}
+
+.task-calendar {
+    display: grid;
+    grid-gap: 3px;
+    padding: 1px 3px;
+    grid-template-columns: auto;
+    align-items: center;
+    margin: 0; 
+}
+
+.task-description {
+    border: none;
+}
+  
+.task-description-done {
+    border: none;
+    text-decoration: line-through;
+}
+
+.nav-title {
+    color: white;
+    text-decoration: none;
+    font-family: 'Roboto';
+    font-size: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-family: 'Roboto';
+    font-size: 16px;
 }
