@@ -15,7 +15,7 @@ const NavBar = () => {
     const { idToken } = useContext(AuthContext);
 
   return (
-    <AppBar className="app-navbar" position="static" sx={{backgroundColor: 'black', padding: 2,  pb: {xs:2, md:3} }}>
+    <AppBar className="app-navbar" position="static" sx={{backgroundColor: 'maroon', padding: 2,  pb: {xs:2, md:3} }}>
         <Stack direction={{ xs: 'row', md: 'column', }}
                spacing={1}
                alignItems={{xs: 'center', md: 'flex-start'}}

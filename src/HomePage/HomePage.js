@@ -37,7 +37,7 @@ const HomePage = () => {
         <>
         <Box className="app-title" sx={{ml: 1}}>
             <Typography variant="h3">
-                Welcome to Sensor Droids
+                Sensor Droids
             </Typography>
         </Box>
         <Box className="app-homepage" sx={{ml: 1}}>
