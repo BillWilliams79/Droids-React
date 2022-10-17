@@ -43,7 +43,7 @@ const DroidView = () => {
 
         console.count('useEffect: Read droids REST API data');
 
-        let Uri = `${droidsUri}/droids?creator_fk=${droidProfile}`
+        let Uri = `${droidsUri}/droids?profile_fk=${droidProfile}`
 
         call_rest_api(Uri, 'GET', '', null)
             .then(result => {

@@ -52,7 +52,7 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
 
         // FETCH TASKS: filter for creator, done=0 and area.id
         // QSPs limit fields to minimum: id,priority,done,description,area_fk
-        //let droidDataUri = `${droidsUri}/${sensorObject.name}?droid_fk=${droidId}&filter_ts=(time_ts,${startDateString},${endDateString})`
+        //let droidDataUri = `${droidsUri}/${sensorObject.name}?droid_fk=${droidId}&filter_ts=(sample_time,${startDateString},${endDateString})`
         let droidDataUri = `${droidsUri}/${sensorObject.name}?droid_fk=${droidId}`
         varDump(droidDataUri, "computed URI")
         call_rest_api(droidDataUri, 'GET', '', null)
@@ -62,7 +62,7 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
 
                     // Store Droid Data, but first trim excess precision
                     result.data = result.data.map((data) => { 
-                        data.time_ts = data.time_ts.slice(5,10);
+                        data.sample_time = data.sample_time.slice(5,10);
                         if ((sensorObject.dataPoint === 'temperature') ||
                             (sensorObject.dataPoint === 'relative_humidity') ||
                             (sensorObject.dataPoint === 'soil_temperature') ||
@@ -70,8 +70,8 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                             data[sensorObject.dataPoint] = data[sensorObject.dataPoint].toPrecision(3);
                         }
                         return data;
-                        }
-                    )
+                    })
+
                     setDroidDataArray(result.data);
 
                 } else {
@@ -110,7 +110,7 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                         <LineChart data={droidDataArray}>
                             <CartesianGrid strokeDasharray="3 3"/>
                             <Line type="monotone" dataKey={sensorObject.dataPoint} />
-                            <XAxis dataKey="time_ts"/>
+                            <XAxis dataKey="sample_time"/>
                             <YAxis />
                             <Tooltip />
                         </LineChart>

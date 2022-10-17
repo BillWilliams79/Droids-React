@@ -7,7 +7,6 @@ import { Link } from "react-router-dom"
 
 import AppBar from '@mui/material/AppBar';
 import Stack from '@mui/material/Stack';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AndroidIcon from '@mui/icons-material/Android';
 
 const NavBar = () => {
@@ -15,7 +14,7 @@ const NavBar = () => {
     const { idToken } = useContext(AuthContext);
 
   return (
-    <AppBar className="app-navbar" position="static" sx={{backgroundColor: 'maroon', padding: 2,  pb: {xs:2, md:3} }}>
+    <AppBar className="app-navbar" position="static" sx={{backgroundColor: 'darkslateblue', padding: 2,  pb: {xs:2, md:3} }}>
         <Stack direction={{ xs: 'row', md: 'column', }}
                spacing={1}
                alignItems={{xs: 'center', md: 'flex-start'}}
