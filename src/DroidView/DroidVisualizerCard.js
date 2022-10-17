@@ -109,7 +109,7 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                       <ResponsiveContainer width={'100%'} aspect={1}>
                         <LineChart data={droidDataArray}>
                             <CartesianGrid strokeDasharray="3 3"/>
-                            <Line type="monotone" dataKey={sensorObject.dataPoint} />
+                            <Line type="monotone" isAnimationActive={false} dataKey={sensorObject.dataPoint} />
                             <XAxis dataKey="sample_time"/>
                             <YAxis />
                             <Tooltip />
