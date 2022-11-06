@@ -40,7 +40,7 @@ const DroidView = () => {
 
     // READ droids data
     useEffect( () => {
-
+ 
         console.count('useEffect: Read droids REST API data');
 
         let Uri = `${droidsUri}/droids?profile_fk=${droidProfile}`

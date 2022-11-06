@@ -1,7 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import varDump from '../classifier/classifier';
+import AuthContext from '../Context/AuthContext.js'
+import AppContext from '../Context/AppContext';
+import call_rest_api from '../RestApi/RestApi';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 import {SnackBar} from '../Components/SnackBar/SnackBar';
 
@@ -15,14 +18,10 @@ import DroidVisualizerCard from './DroidVisualizerCard';
 
 const DroidTabPanel = ( { droid, droidIndex } ) => {
 
-    // Tab Panel contains all the taskcards for a given domain
-    // Parent is TaskCardContent. Children are TaskCards
+    const { droidProfile, idToken } = useContext(AuthContext);
+    const { droidsUri } = useContext(AppContext);
 
-    //const { droidProfile } = useContext(AuthContext);
-    //const { droidUri } = useContext(AppContext);
-
-    const [sensorsArray, setSensorsArray] = useState()
-    //const [droidApiTrigger, setDroidApiTrigger] = useState(false); 
+    const [sensorDescriptioinArray, setSensorDescriptioinArray] = useState()
 
     // snackBar state
     const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -32,43 +31,42 @@ const DroidTabPanel = ( { droid, droidIndex } ) => {
 
 
     // READ AREA API data for TabPanel
-    useEffect( () => {
+    useEffect( () => { 
 
         console.count('useEffect: read all Rest API data');
 
-        // TODO - droids needs a list of attached sensors that we can correlate to table data and read into the
+/*         // TODO - droids needs a list of attached sensors that we can correlate to table data and read into the
         // cards
-        setSensorsArray([{name: 'temperature', dataPoint: 'temperature', displayName: 'Air Temperature'},
+        setSensorDescriptioinArray([{name: 'temperature', dataPoint: 'temperature', displayName: 'Air Temperature'},
                          {name: 'relative_humidity', dataPoint: 'relative_humidity', displayName: 'Relative Humidity'},
                          {name: 'soil_temperature', dataPoint: 'soil_temperature', displayName: 'Soil Temperature'},
                          {name: 'soil_moisture', dataPoint: 'soil_moisture', displayName: 'Soil Moisture'},
                          {name: 'uv', dataPoint: 'uv_index', displayName: 'UV Index'},
                          {name: 'rssi', dataPoint: 'rssi', displayName: 'RSSI'},
-                       ]);
+                       ]); */
 
-/*         let areaUri = `${darwinUri}/areas?creator_fk=${profile.userName}&closed=0&domain_fk=${domain.id}&fields=id,area_name,domain_fk,sort_order`;
+        let sensorDescriptionUri = `${droidsUri}/sensor_description?droid_fk=${droid.id}`;
 
-        call_rest_api(areaUri, 'GET', '', idToken)
+        call_rest_api(sensorDescriptionUri, 'GET', '', idToken)
             .then(result => {
                 
-                result.data.sort((areaA,areaB) => areaSortBySortOrder(areaA, areaB));
-                setAreasArray(result.data);
+                setSensorDescriptioinArray(result.data);
 
             }).catch(error => {
                 varDump(error, `UseEffect: error retrieving Areas: ${error}`);
             });
- */
-    }, [setSensorsArray]);
+ 
+    }, [setSensorDescriptioinArray]);
 
     return (
             <TabPanel key={droidIndex} value={droidIndex.toString()} 
                       className="app-content-tabpanel"
             >
-                { sensorsArray ? 
+                { sensorDescriptioinArray ? 
                     <Box className="card">
-                        { sensorsArray.map((sensor, sensorIndex) => (
-                             <DroidVisualizerCard key = {sensor}
-                                                  sensorObject = {{...sensor}}
+                        { sensorDescriptioinArray.map((sensorDescription, sensorIndex) => (
+                             <DroidVisualizerCard key = {sensorDescription}
+                                                  sensorDescription = {{...sensorDescription}}
                                                   droidId = {droid.id}
                             />
                         ))}

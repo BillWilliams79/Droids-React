@@ -16,7 +16,7 @@ import { CircularProgress } from '@material-ui/core';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import { Typography } from '@mui/material';
 
-const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
+const DroidVisualizerCard = ({sensorDescription, sensorIndex, droidId }) => {
 
     // Task card is the list of tasks per area displayed in a card.
     //const { droidProfile } = useContext(AuthContext);
@@ -30,10 +30,10 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
     // eslint-disable-next-line no-unused-vars
     const [snackBarMessage, setSnackBarMessage] = useState('');
 
-    console.count(`Render visualizer for sensor: ${sensorObject.displayName}`)
+    console.count(`Render visualizer for sensor: ${sensorDescription.pretty_name}`)
 
     // READ Task API data for card
-    useEffect( () => {
+    useEffect( () => { 
 
         console.count('useEffect: read task API data for a given area');
 
@@ -52,8 +52,8 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
 
         // FETCH TASKS: filter for creator, done=0 and area.id
         // QSPs limit fields to minimum: id,priority,done,description,area_fk
-        //let droidDataUri = `${droidsUri}/${sensorObject.name}?droid_fk=${droidId}&filter_ts=(sample_time,${startDateString},${endDateString})`
-        let droidDataUri = `${droidsUri}/${sensorObject.name}?droid_fk=${droidId}`
+        //let droidDataUri = `${droidsUri}/${sensorDescription.endpoint}?droid_fk=${droidId}&filter_ts=(sample_time,${startDateString},${endDateString})`
+        let droidDataUri = `${droidsUri}/${sensorDescription.endpoint}?droid_fk=${droidId}`
         varDump(droidDataUri, "computed URI")
         call_rest_api(droidDataUri, 'GET', '', null)
             .then(result => {
@@ -63,11 +63,11 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                     // Store Droid Data, but first trim excess precision
                     result.data = result.data.map((data) => { 
                         data.sample_time = data.sample_time.slice(5,10);
-                        if ((sensorObject.dataPoint === 'temperature') ||
-                            (sensorObject.dataPoint === 'relative_humidity') ||
-                            (sensorObject.dataPoint === 'soil_temperature') ||
-                            (sensorObject.dataPoint === 'uv_index')) {
-                            data[sensorObject.dataPoint] = data[sensorObject.dataPoint].toPrecision(3);
+                        if ((sensorDescription.reading_column_name === 'temperature') ||
+                            (sensorDescription.reading_column_name === 'relative_humidity') ||
+                            (sensorDescription.reading_column_name === 'soil_temperature') ||
+                            (sensorDescription.reading_column_name === 'uv_index')) {
+                            data[sensorDescription.reading_column_name] = data[sensorDescription.reading_column_name].toPrecision(3);
                         }
                         return data;
                     })
@@ -76,7 +76,7 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
 
                 } else {
 
-                    varDump(result.httpStatus, `DroidVisualizerCard UseEffect: error retrieving sensor data ${sensorObject.displayName}`);
+                    varDump(result.httpStatus, `DroidVisualizerCard UseEffect: error retrieving sensor data ${sensorDescription.pretty_name}`);
                 }  
 
             }).catch(error => {
@@ -87,20 +87,38 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                     setDroidDataArray([]);
 
                 } else {
-                    varDump(error, `DroidVisualizerCard UseEffect: error retrieving sensor data ${sensorObject.displayName}`);
+                    varDump(error, `DroidVisualizerCard UseEffect: error retrieving sensor data ${sensorDescription.pretty_name}`);
                 }
             });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+          return (
+            <Box sx={{backgroundColor: 'beige'}}>
+                <Typography variant="caption" component='p'>
+                {label}
+                </Typography>
+                <Typography variant="caption">
+                {`${sensorDescription.reading_units} : ${payload[0].value}`}
+                </Typography>
+            </Box>
+
+          );
+        }
+      
+        return null;
+      };
+
     return (
-        <Card key={sensorObject.name} raised={true} >
+        <Card key={sensorDescription.endpoint} raised={true} >
             <CardContent>
                 <Box className="card-header" sx={{marginBottom: 2}}>
-                    <Typography key={`sensorName-${sensorObject.name}`}
+                    <Typography key={`sensorName-${sensorDescription.endpoint}`}
                                 variant="h5">
-                        {sensorObject.displayName || ''}
+                        {sensorDescription.pretty_name || ''}
                     </Typography>
 
                 </Box>
@@ -109,10 +127,10 @@ const DroidVisualizerCard = ({sensorObject, sensorIndex, droidId }) => {
                       <ResponsiveContainer width={'100%'} aspect={1}>
                         <LineChart data={droidDataArray}>
                             <CartesianGrid strokeDasharray="3 3"/>
-                            <Line type="monotone" isAnimationActive={false} dataKey={sensorObject.dataPoint} />
+                            <Line type="monotone" isAnimationActive={false} dataKey={sensorDescription.reading_column_name} />
                             <XAxis dataKey="sample_time"/>
-                            <YAxis />
-                            <Tooltip />
+                            <YAxis label={{ value: sensorDescription.reading_units, angle: -90, position: 'insideLeft' }}/>
+                            <Tooltip content={<CustomTooltip sensorDescription={sensorDescription}/>}/>
                         </LineChart>
                       </ResponsiveContainer>
                     :
